@@ -1,10 +1,12 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
+import { prisma } from './lib/prisma'
 
 const app = new Hono()
 
-app.get('/todos', (c) => {
-  return c.text('Hello Hono!')
+app.get('/todos', async (c) => {
+  const todos = await prisma.todo.findMany()
+  return c.json(todos)
 })
 
 serve({
