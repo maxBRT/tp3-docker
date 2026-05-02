@@ -22,7 +22,7 @@ function App() {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const response: AxiosResponse<Todo[]> = await axios.get("http://localhost:3001/todos")
+        const response: AxiosResponse<Todo[]> = await axios.get("/api/todos")
         const todos = response.data
         console.log(todos)
         setTodos(todos)
@@ -39,7 +39,7 @@ function App() {
     e.preventDefault()
     if (!task.trim()) return
     try {
-      const response: AxiosResponse<Todo> = await axios.post("http://localhost:3001/todos", { text: task })
+      const response: AxiosResponse<Todo> = await axios.post("/api/todos", { text: task })
       setTodos([...todos, response.data])
       setTask("")
     } catch (e) {
@@ -49,7 +49,7 @@ function App() {
 
   const toggleTodo = async (id: string, done: boolean) => {
     try {
-      await axios.put(`http://localhost:3001/todos/${id}`, { done: !done })
+      await axios.put(`/api/todos/${id}`, { done: !done })
       setTodos(todos.map(t => t.id === id ? { ...t, done: !done } : t))
     } catch (e) {
       setError(e)
@@ -58,7 +58,7 @@ function App() {
 
   const deleteTodo = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:3001/todos/${id}`)
+      await axios.delete(`/api/todos/${id}`)
       setTodos(todos.filter(t => t.id !== id))
     } catch (e) {
       setError(e)
