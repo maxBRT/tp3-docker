@@ -17,6 +17,8 @@ services:
   api:
     build: ./api
     restart: always
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
     depends_on:
       db:
         condition: service_healthy
