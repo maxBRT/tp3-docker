@@ -1,8 +1,8 @@
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 
-import axios, {type AxiosResponse} from "axios";
+import axios, { type AxiosResponse } from "axios";
 import * as React from "react";
 
 
@@ -20,13 +20,13 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      try{
+      try {
         setLoading(true)
-        const response : AxiosResponse<Todo[]>= await axios.get("http://localhost:3000/todos")
+        const response: AxiosResponse<Todo[]> = await axios.get("http://localhost:3001/todos")
         const todos = response.data
         console.log(todos)
         setTodos(todos)
-      } catch (e){
+      } catch (e) {
         setError(e)
       } finally {
         setLoading(false)
@@ -39,7 +39,7 @@ function App() {
     e.preventDefault()
     if (!task.trim()) return
     try {
-      const response: AxiosResponse<Todo> = await axios.post("http://localhost:3000/todos", { text: task })
+      const response: AxiosResponse<Todo> = await axios.post("http://localhost:3001/todos", { text: task })
       setTodos([...todos, response.data])
       setTask("")
     } catch (e) {
@@ -49,7 +49,7 @@ function App() {
 
   const toggleTodo = async (id: string, done: boolean) => {
     try {
-      await axios.put(`http://localhost:3000/todos/${id}`, { done: !done })
+      await axios.put(`http://localhost:3001/todos/${id}`, { done: !done })
       setTodos(todos.map(t => t.id === id ? { ...t, done: !done } : t))
     } catch (e) {
       setError(e)
@@ -58,7 +58,7 @@ function App() {
 
   const deleteTodo = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:3000/todos/${id}`)
+      await axios.delete(`http://localhost:3001/todos/${id}`)
       setTodos(todos.filter(t => t.id !== id))
     } catch (e) {
       setError(e)
@@ -68,35 +68,35 @@ function App() {
 
   return (
     <>
-    {error && (<div className="error-message">Error: {error.message || JSON.stringify(error)}</div>)}
-    {loading && (<div>Loading...</div>)}
+      {error && (<div className="error-message">Error: {error.message || JSON.stringify(error)}</div>)}
+      {loading && (<div>Loading...</div>)}
       <section id="center">
         <div>
           <h1>Todo List</h1>
         </div>
         <form onSubmit={createTodo}>
-          <input className="task-input" type="text" onChange={(e) => setTask(e.target.value)} value={task}/>
+          <input className="task-input" type="text" onChange={(e) => setTask(e.target.value)} value={task} />
           <button
-              type="submit"
-              className="counter"
+            type="submit"
+            className="counter"
           >
             +
           </button>
         </form>
         <ul className="todo-list">
           {todos.map((t: Todo) => (
-              <li key={t.id} className={`todo-item ${t.done ? 'done' : ''}`}>
-                  <div className="todo-content">
-                    <input type="checkbox" checked={t.done} onChange={() => toggleTodo(t.id, t.done)}/>
-                    <p>{t.text}</p>
-                  </div>
-                  <button className="delete-btn" onClick={() => deleteTodo(t.id)}>×</button>
-              </li>
+            <li key={t.id} className={`todo-item ${t.done ? 'done' : ''}`}>
+              <div className="todo-content">
+                <input type="checkbox" checked={t.done} onChange={() => toggleTodo(t.id, t.done)} />
+                <p>{t.text}</p>
+              </div>
+              <button className="delete-btn" onClick={() => deleteTodo(t.id)}>×</button>
+            </li>
           ))}
         </ul>
       </section>
 
-      </>
+    </>
   )
 }
 
