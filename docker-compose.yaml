@@ -1,5 +1,11 @@
 services:
-  api: 
+  client:
+    image: maximebourret/tp3docker-client
+    build: ./client
+    restart: always
+    ports:
+      - "4321:4321"
+  api:
     image: maximebourret/tp3docker-api
     build: ./api
     restart: always
